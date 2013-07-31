@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
+import scala.util.Sorting
 
 object InputStreams {
 
@@ -50,7 +51,11 @@ object InputStreams {
         Future {
           println("sorting chunk: " + chunk)
 
-          val sorted = s.toStream.sorted
+          val sorted = {
+            val array = s.toArray
+            Sorting.quickSort(array)
+            array
+          }
           val ret = new File(sortedFileDir, "%d".format(chunk * chunkSize))
           val out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(ret)))
 
